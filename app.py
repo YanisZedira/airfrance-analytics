@@ -12,6 +12,25 @@ from plotly.subplots import make_subplots
 import warnings
 warnings.filterwarnings('ignore')
 
+import base64
+import os
+
+# ==========================================================================
+# LOGO
+# ==========================================================================
+LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Air_France_Logo.svg/1200px-Air_France_Logo.svg.png"
+
+def get_logo_base64():
+    """Charge le logo local en base64, sinon utilise l'URL."""
+    logo_path = "assets/logo_airfrance.png"
+    if os.path.exists(logo_path):
+        with open(logo_path, "rb") as f:
+            data = base64.b64encode(f.read()).decode()
+        return f"data:image/png;base64,{data}"
+    return LOGO_URL
+
+LOGO_SRC = get_logo_base64()
+
 # ==========================================================================
 # CONFIG
 # ==========================================================================
@@ -296,11 +315,14 @@ def build_3d_aircraft():
 # SIDEBAR
 # ==========================================================================
 with st.sidebar:
-    st.markdown("""
+    st.markdown(f"""
     <div style="text-align:center; padding: 20px 0;">
-        <div style="font-size:2.5rem;">✈️</div>
-        <h2 style="font-size:1.3rem; margin:5px 0; font-weight:800;">AIR FRANCE</h2>
-        <p style="font-size:0.8rem; opacity:0.7;">Analytics Platform</p>
+        <img src="{LOGO_SRC}" 
+             alt="Air France" 
+             style="width: 180px; margin-bottom: 10px; filter: brightness(0) invert(1);">
+        <p style="font-size:0.8rem; opacity:0.7; margin-top:5px;">
+            Analytics Platform
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1267,3 +1289,4 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True)
+
